@@ -1,7 +1,7 @@
 // benchmark.cpp
-// g++ -O2 benchmark.cpp -o benchmark_cpp
-// clang++ -O3 -march=native -flto  benchmark.cpp -o benchmark_cpp
-// /usr/bin/time -v ./benchmark_cpp
+// g++ benchmark.cpp -o benchmark_cpp
+// clang++ benchmark.cpp -o benchmark_cpp
+// /usr/bin/time -f "Total execution time: %E" ./benchmark_cpp
 
 #include <iostream>   // For input/output operations
 #include <vector>     // For dynamic array (vector)
@@ -9,7 +9,7 @@
 #include <cstdint>    // For int64_t type
 #include <array>      // For fixed-size array
 
-constexpr int64_t ITERATIONS = 100000000;  // Number of times to run the main loop
+constexpr int64_t ITERATIONS = 10000000;  // Number of times to run the main loop
 constexpr int ARRAY_SIZE = 1000;           // Size of the object array
 
 // Class representing a kernel object

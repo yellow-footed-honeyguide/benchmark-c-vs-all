@@ -1,7 +1,6 @@
 // benchmark.go - Performance comparison for kernel-like operations
 // go build -o benchmark_go benchmark.go
-// go build -o benchmark_go benchmark.go
-// /usr/bin/time -v ./benchmark_go
+// /usr/bin/time -f "Total execution time: %E" ./benchmark_go
 
 
 package main
@@ -11,7 +10,7 @@ import (
 )
 
 const (
-    ITERATIONS = 100000000  // Number of times to run the main loop
+    ITERATIONS = 10000000  // Number of times to run the main loop
     ARRAY_SIZE = 1000       // Size of the object array
 )
 

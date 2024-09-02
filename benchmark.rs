@@ -1,9 +1,8 @@
 // benchmark.rs
-// rustc -O benchmark.rs -o benchmark_rs
-// rustc -O benchmark.rs -C opt-level=3 -C target-cpu=native -C lto -o benchmark_rs
-// /usr/bin/time -v ./benchmark_rs
+// rustc benchmark.rs -o benchmark_rs
+// /usr/bin/time -f "Total execution time: %E" ./benchmark_rs
 
-const ITERATIONS : i64 = 100_000_000;  // Number of times to run the main loop
+const ITERATIONS : i64 = 10_000_000;  // Number of times to run the main loop
 const ARRAY_SIZE : usize = 1000;       // Size of the object vector
 
 // Structure representing a kernel object

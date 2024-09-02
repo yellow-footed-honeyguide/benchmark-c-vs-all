@@ -1,13 +1,13 @@
 // benchmark.c
-// gcc -O2 benchmark.c -o benchmark_c
-// clang -O3 -march=native -flto benchmark.c -o benchmark_c
-// /usr/bin/time -v ./benchmark_c
+// gcc benchmark.c -o benchmark_c
+// clang benchmark.c -o benchmark_c
+// /usr/bin/time -f "Total execution time: %E" ./benchmark_c
 
 #include <stdint.h>  // For int64_t type
 #include <stdio.h>   // For input/output operations
 #include <stdlib.h>  // For memory allocation
 
-#define ITERATIONS 100000000  // Number of times to run the main loop
+#define ITERATIONS 10000000  // Number of times to run the main loop
 #define ARRAY_SIZE 1000       // Size of the object array
 
 // Structure representing a kernel object
