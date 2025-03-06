@@ -21,8 +21,8 @@ type KernelObject struct {
 }
 
 // Function to create a new KernelObject
-func newKernelObject(id int64) *KernelObject {
-    return &KernelObject{id: id}  // Return pointer to new KernelObject with given id
+func newKernelObject(id int64) KernelObject {
+    return KernelObject{id: id}  // Return pointer to new KernelObject with given id
 }
 
 // Method to perform work on a KernelObject
@@ -38,7 +38,7 @@ func (ko *KernelObject) getData(index int) int64 {
 }
 
 func main() {
-    objects := make([]*KernelObject, ARRAY_SIZE)  // Slice to hold pointers to KernelObjects
+    objects := make([]KernelObject, ARRAY_SIZE)  // Slice to hold pointers to KernelObjects
     var total int64 = 0  // Accumulator for benchmark results
 
     // Main benchmark loop
