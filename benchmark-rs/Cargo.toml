@@ -1,0 +1,12 @@
+[package]
+name = "benchmark-rs"
+
+[profile.release]
+opt-level = 3
+codegen-units = 1
+lto = "fat"
+debug = false
+panic = "abort"
+overflow-checks = false
+strip = true
+debug-assertions = false
