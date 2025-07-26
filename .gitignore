@@ -1,0 +1,8 @@
+*.exe
+*.pdb
+benchmark_gcc
+benchmark_gpp
+benchmark_clangpp
+benchmark_clang
+benchmark_go
+benchmark-rs/target

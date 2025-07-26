@@ -1,69 +1,63 @@
-// benchmark.c
-// gcc benchmark.c -o benchmark_c
-// clang benchmark.c -o benchmark_c
-// /usr/bin/time -f "Total execution time: %E" ./benchmark_c
+#include <assert.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include <stdint.h>  // For int64_t type
-#include <stdio.h>   // For input/output operations
-#include <stdlib.h>  // For memory allocation
+typedef struct Kernel {
+  uint64_t id;
+  uint64_t data[64];
+} Kernel;
 
-#define ITERATIONS 10000000  // Number of times to run the main loop
-#define ARRAY_SIZE 1000       // Size of the object array
-
-// Structure representing a kernel object
-struct kernel_object {
-    int64_t id;        // Unique identifier for the object
-    int64_t data[64];  // Array to store computed data
-};
-
-// Function to create and initialize a new kernel object
-struct kernel_object *create_object(int64_t id) {
-    struct kernel_object *obj =
-        malloc(sizeof(struct kernel_object));  // Allocate memory for the object
-    if (obj) {                                 // If allocation was successful
-        obj->id = id;                          // Set the object's id
-        for (int i = 0; i < 64; i++) {
-            obj->data[i] = 0;  // Initialize all data elements to 0
-        }
-    }
-    return obj;  // Return the created object (or NULL if allocation failed)
+Kernel *create_kernel(uint64_t id) {
+  Kernel *kernel = malloc(sizeof(*kernel));
+  if (!kernel)
+    return NULL;
+  kernel->id = id;
+  // fill with zeros
+  memset(kernel->data, 0, sizeof kernel->data);
+  return kernel;
 }
 
-// Function to perform work on a kernel object
-void perform_work(struct kernel_object *obj) {
-    for (int i = 0; i < 64; i++) {
-        obj->data[i] =
-            (obj->id + i) & 0x7FFFFFFFFFFFFFFFLL;  // Compute data (ensure positive value)
-    }
+void destroy_kernel(Kernel *kernel) {
+  // its safe to free NULL
+  free(kernel);
 }
 
-int main() {
-    struct kernel_object *objects[ARRAY_SIZE] = {NULL};  // Array to hold kernel objects
-    int64_t total = 0;                                   // Accumulator for benchmark results
+void perform_work(Kernel *kernel) {
+  for (size_t i = 0; i < 64; i++) {
+    kernel->data[i] = kernel->id + i;
+  }
+}
 
-    // Main benchmark loop
-    for (int64_t i = 0; i < ITERATIONS; i++) {
-        int index = i % ARRAY_SIZE;  // Cyclic index for object array
-        if (objects[index]) {
-            free(objects[index]);  // Free old object if it exists
-        }
-        objects[index] = create_object(i);  // Create new object
-        perform_work(objects[index]);       // Perform work on the object
-        total = (total + objects[index]->data[0]) &
-                0x7FFFFFFFFFFFFFFFLL;  // Update total (ensure positive)
-        if (i % 10000000 == 0) {
-            printf("C Intermediate %ld: %ld\n", i,
-                   total);  // Print progress every 10 million iterations
-        }
-    }
+int main(int argc, char *argv[]) {
+  uint64_t iterations = strtoull(argv[1], NULL, 10);
+  size_t array_size = strtoull(argv[2], NULL, 10);
 
-    // Clean up allocated memory
-    for (int i = 0; i < ARRAY_SIZE; i++) {
-        if (objects[i]) {
-            free(objects[i]);
-        }
-    }
+  Kernel **objects = calloc(array_size, sizeof(*objects));
+  assert(objects != NULL);
 
-    printf("C version completed, total: %ld\n", total);  // Print final result
-    return 0;
+  uint64_t total = 0;
+
+  for (uint64_t i = 0; i < iterations; i++) {
+    size_t idx = i % array_size;
+
+    destroy_kernel(objects[idx]);
+
+    objects[idx] = create_kernel(i);
+    assert(objects[idx] != NULL);
+
+    perform_work(objects[idx]);
+    total += objects[idx]->data[0];
+  }
+
+  // free everything. Its safe to free NULL
+  for (size_t i = 0; i < array_size; i++) {
+    free(objects[i]);
+  }
+  free(objects);
+
+  printf("C version completed, total = %llu\n", total);
+
+  return EXIT_SUCCESS;
 }

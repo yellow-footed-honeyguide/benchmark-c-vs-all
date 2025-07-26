@@ -6,9 +6,15 @@
 |----------|-------------|
 | C        | [`benchmark.c`](benchmark.c) |
 | C++      | [`benchmark.cpp`](benchmark.cpp) |
-| Rust     | [`benchmark.rs`](benchmark.rs) |
+| Rust     | [`benchmark-rs/src/main.rs`](benchmark-rs/src/main.rs) |
 | Go       | [`benchmark.go`](benchmark.go) |
 
+## Prerequesties:
+* `Python` with `matplotlib` (install with `pip install matplotlib`)
+* `Go` toolchain
+* `Rust` toolchain
+* `GCC` toolchain
+* `Clang` toolchain
 
 ## Run benchmark
 [run_benchmark.py](run_benchmark.py)
